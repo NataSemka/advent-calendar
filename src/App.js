@@ -1,59 +1,53 @@
 import './App.css';
+import {Box, Typography, Dialog, Link} from '@mui/material';
+import React from 'react';
+import moment from 'moment';
+import {backendData} from './data';
 
 function App() {
+  const [currentDayInfo, setCurrentDayInfo] = React.useState({});
+  const [open, setOpen] = React.useState(false);
+  const isDisabled = (id) => {
+    const dateToCheck = moment(`2024-12-${id}`);
+    const today = moment().startOf('day');
+    return !dateToCheck.isSame(today, 'day');
+  }
+
+  const handleOpen = (day) => {
+    if (isDisabled(day.id)) return;
+
+    setOpen(true);
+    setCurrentDayInfo(day);
+    localStorage.setItem(`day${day.id}`, day.id);
+  }
+  const handleClose = () => setOpen(false);
+
+  const isOpen = (id) => localStorage.getItem(`day${id}`);
+
   return (
-    <div className="App" style={{ display: "flex", justifyContent: "center" }}>
-      <Notes />
+    <div>
+      <div className='container'>
+        {backendData.map(day => 
+          <div className={`item ${isOpen(day.id) ? 'isOpen' : ''} ${isDisabled(day.id) ? 'disabled' : ''} item${day.id}`} key={day.id} onClick={() => handleOpen(day)}>
+            <div className='itemNumber'>{day.id}</div>
+          </div>
+        )}
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <div className='modal-content'>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              {currentDayInfo.text}
+            </Typography>
+            <Link href={currentDayInfo.url}>{currentDayInfo.url}</Link>
+          </div>
+        </Dialog>
+      </div>
     </div>
   );
-}
-
-function Notes() {
-  const backendData = [
-    { id: '1', text: 'Річниця Всеукраїнського референдуму про відділення від СРСР. Рівно 30 років тому  90% українців висловилися за Незалежність України.', url: 'https://w.wiki/8RcL' },
-    { id: '2', text: 'Ярослав Мудрий у 1015 році посів у Києві княжий престол', url: 'https://www.hroniky.com/news/view/13944-iaroslav-mudryi-u-1015-rotsi-posiv-u-kyievi-kniazhyi-prestol' },
-    { id: '3' },
-    { id: '4' },
-    { id: '5' },
-    { id: '6' },
-    { id: '7' },
-    { id: '8' },
-    { id: '9' },
-    { id: '10' },
-    { id: '11' },
-    { id: '12' },
-    { id: '13' },
-    { id: '14' },
-    { id: '15' },
-    { id: '16' },
-    { id: '17' },
-    { id: '18' },
-    { id: '19' },
-    { id: '20' },
-    { id: '21' },
-    { id: '22' },
-    { id: '23' },
-    { id: '24' },
-  ]
-
-  const noteRootStyle = {
-    border: "2px #0af solid",
-    borderRadius: 9,
-    margin: 20,
-    backgroundColor: "#efefef",
-    padding: 6
-  };
-
-  return (
-    <div style={{ width: 400 }}>
-      {backendData.map(day => 
-        <div style={noteRootStyle} key={day.id}>
-          <p>{day.text}</p>
-          <a href={day.url}>{day.url}</a>
-        </div>
-      )}
-    </div>
-  )
 }
 
 export default App;
