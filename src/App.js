@@ -14,7 +14,7 @@ function App() {
   }
 
   const handleOpen = (day) => {
-    if (isDisabled(day.id)) return;
+    //if (isDisabled(day.id)) return;
 
     setOpen(true);
     setCurrentDayInfo(day);

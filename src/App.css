@@ -55,10 +55,6 @@ body {
   padding: 24px
 }
 
-.isOpen {
-  background-color: firebrick;
-}
-
 .item01 {
   background-image: url('../public/images/1.jpg');
 }
@@ -153,6 +149,10 @@ body {
 
 .item24 {
   background-image: url('../public/images/24.jpg');
+}
+
+.isOpen {
+  background-image: url('../public/images/hatch_backdrop.jpg');
 }
 
 @keyframes App-logo-spin {
